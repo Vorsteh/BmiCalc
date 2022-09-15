@@ -10,7 +10,7 @@ namespace BMI
     {
         //Dem olika nivåerna för män respektive kvinnor.
         public static float[] levelsMale = { 20.0f, 25.0f, 30.0f };
-        public static float[] levelsFemale = { 18.5f, 24.0f, 29.0f};
+        public static float[] levelsFemale = { 18.5f, 24.0f, 29.0f };
 
         //Denna funtion kalkulerar din BMI på höjd och vikt Math.Pow är inte riktigt nödvändigt men ser bra och professionellt ut
         public static float calcBmi(float height, float weight)
@@ -18,36 +18,40 @@ namespace BMI
             return (weight / (float)Math.Pow(height / 100, 2));
         }
 
-        
+
 
         //Denna funktion användes för att ta reda på vilken din nästa nivå är och hur långt du har dit. 
         public static void nextLevel(float height, float weight, int level, bool isMale)
         {
             float requiredWeight;
             float weightDifference;
-
-            if (isMale)
+            if(level == 3)
             {
-                requiredWeight = (float)Math.Sqrt(levelsMale[level++] * height);
+                Console.WriteLine("Fat fuck");
+            }
+             else if (isMale)
+            {
+                //requiredWeight = (float)Math.Sqrt(levelsMale[level++] * Math.Pow(height, 2));
+                requiredWeight = levelsMale[level] * ((float)Math.Pow(height / 100, 2));
                 weightDifference = requiredWeight - weight;
 
                 Console.WriteLine("Your need to gain " + Math.Round(weightDifference, 1) + " kg to reach the next BMI level.");
             }
             else
             {
-                requiredWeight = (float)Math.Sqrt(levelsFemale[level++] * height);
+                requiredWeight = levelsFemale[level] * ((float)Math.Pow(height / 100, 2));
                 weightDifference = requiredWeight - weight;
 
-                Console.WriteLine("Your need to gain " + Math.Round(weightDifference, 1) + " kg to reach the next BMI level.");
+                Console.WriteLine("You need to gain " + Math.Round(weightDifference, 1) + " kg to reach the next BMI level.");
             }
-            
+
         }
 
         //Denna funktion används för att slippa repetera koden innut i på flera ställen = mindre kod.
         public static void printColoredText(string text, ConsoleColor color)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(text);
+            Console.Write(text);
             Console.ResetColor();
         }
 
@@ -131,23 +135,33 @@ namespace BMI
                 //Här nedan kollar den ifall du är man eller kvinna så den korrekt kan ge dig din viktklass. 
                 if (isMale)
                 {
-                    if(BMI < levelsMale[0])
+                    if (BMI < levelsMale[0])
                     {
-                        printColoredText("You are in level one with a BMI of " + BMI.ToString(), ConsoleColor.Green);
+                        printColoredText("You are in level one with a BMI of ", ConsoleColor.Green);
+                        printColoredText(BMI.ToString(), ConsoleColor.Blue);
+                        Console.WriteLine("\n");
+                        level = 0;
+                    }
+                    else if (BMI >= levelsMale[0] && BMI < levelsMale[1])
+                    {
+                        printColoredText("You are in level two with a BMI of ", ConsoleColor.Green);
+                        printColoredText(BMI.ToString(), ConsoleColor.Blue);
+                        Console.WriteLine("\n");
                         level = 1;
-                    }else if(BMI >= levelsMale[0] && BMI < levelsMale[1])
+                    }
+                    else if (BMI >= levelsMale[1] && BMI < levelsMale[2])
                     {
-                        printColoredText("You are in level two with a BMI of " + BMI.ToString(), ConsoleColor.Green);
+                        printColoredText("You are in level three with a BMI of ", ConsoleColor.Green);
+                        printColoredText(BMI.ToString(), ConsoleColor.Blue);
+                        Console.WriteLine("\n");
                         level = 2;
-                    }else if(BMI >= levelsMale[1] && BMI < levelsMale[2])
-                    {
-                        printColoredText("You are in level three with a BMI of " + BMI.ToString(), ConsoleColor.Green);
-                        level = 3;
                     }
                     else
                     {
-                        printColoredText("You are in level four with a BMI of " + BMI.ToString(), ConsoleColor.Green);
-                        level = 4;
+                        printColoredText("You are in level four with a BMI of ", ConsoleColor.Green);
+                        printColoredText(BMI.ToString(), ConsoleColor.Blue);
+                        Console.WriteLine("\n");
+                        level = 3;
                     }
                     nextLevel(height, weight, level, isMale);
                 }
@@ -156,22 +170,22 @@ namespace BMI
                     if (BMI < levelsFemale[0])
                     {
                         Console.WriteLine("You are in level one with a BMI of " + BMI);
-                        level = 1;
+                        level = 0;
                     }
                     else if (BMI >= levelsFemale[0] && BMI < levelsFemale[1])
                     {
                         Console.WriteLine("You are in level two with a BMI of " + BMI);
-                        level = 2;
+                        level = 1;
                     }
                     else if (BMI >= levelsFemale[1] && BMI < levelsFemale[2])
                     {
                         Console.WriteLine("You are in level three with a BMI of " + BMI);
-                        level = 3;
+                        level = 2;
                     }
                     else
                     {
                         Console.WriteLine("You are in level four with a BMI of" + BMI);
-                        level = 4;
+                        level = 3;
                     }
                     nextLevel(height, weight, level, isMale);
                 }
@@ -179,9 +193,11 @@ namespace BMI
                 //Denna del av programmet kollar ifall du vill fortsätta elller avsluta programmet. 
                 Thread.Sleep(1200);
                 Console.WriteLine("\n\n");
-                Console.WriteLine("Do you want to continue?(Yes/No)");
+                printColoredText("Do you want to continue?(Yes/No)", ConsoleColor.Cyan);
+                Console.WriteLine("\n");
 
-                if (Console.ReadLine().ToLower() == "yes"){
+                if (Console.ReadLine().ToLower() == "yes")
+                {
                     validHeight = false;
                     validWeight = false;
                     requiredGender = false;
